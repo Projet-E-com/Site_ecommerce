@@ -24,7 +24,7 @@ class HomeController extends AbstractController
     public function contact(CategorieRepository $categorie): Response
     {
         return $this->render('contact.html.twig', [
-            'categorie' => $categorie->findAll()
+            'categories' => $categorie->findAll()
         ]);
     }
 
@@ -32,7 +32,7 @@ class HomeController extends AbstractController
     public function apropos(CategorieRepository $categorie): Response
     {
         return $this->render('apropos.html.twig', [
-            'categorie' => $categorie->findAll()
+            'categories' => $categorie->findAll()
         ]);
     }
 }
