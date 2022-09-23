@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Panier;
+use App\Entity\Souhait;
 use App\Repository\CategorieRepository;
 use App\Repository\ProduitRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,7 +29,28 @@ class PanierController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->redirectToRoute($request->attributes->get('_route'),[
+        return $this->redirectToRoute('app_home',[
+            'categories' => $categorie->findAll(),
+            'produit' => $produit->findAll(),
+        ]);
+    }
+
+    #[Route('/ajout_souhait/{id}', name: 'add_souhait')]
+    public function ajoutsouhait(int $id, ManagerRegistry $doctrine, ProduitRepository $produit, CategorieRepository $categorie, Request $request): Response
+    {
+        $entityManager = $doctrine->getManager();
+
+        $souhait = new Souhait();
+        $souhait
+            ->setProduit($produit->find($id))
+            ->setUser($this->getUser())
+        ;
+
+        $entityManager->persist($souhait);
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home',[
             'categories' => $categorie->findAll(),
             'produit' => $produit->findAll(),
         ]);
