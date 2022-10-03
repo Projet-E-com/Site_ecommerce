@@ -29,10 +29,8 @@ class PanierController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_home',[
-            'categories' => $categorie->findAll(),
-            'produit' => $produit->findAll(),
-        ]);
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
     }
 
     #[Route('/ajout_souhait/{id}', name: 'add_souhait')]
@@ -54,5 +52,10 @@ class PanierController extends AbstractController
             'categories' => $categorie->findAll(),
             'produit' => $produit->findAll(),
         ]);
+    }
+
+    #[Route('/remove')]
+    public function removepanier(){
+
     }
 }
