@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Panier;
 use App\Entity\Produit;
 use App\Repository\CategorieRepository;
 use App\Repository\PanierRepository;
@@ -31,12 +32,18 @@ class CompteController extends AbstractController
     }
 
     #[Route('/panier', name: 'app_panier')]
-    public function panier(PanierRepository $panier, ProduitRepository $produit, CategorieRepository $categorie): Response
+    public function panier(PanierRepository $panier, ProduitRepository $produit, CategorieRepository $categorie, ?Panier $paniers): Response
     {
+
+
         return $this->render('compte/panier.html.twig', [
-            'paniers' => $panier->findAll(),
+            'paniers' => $panier->findBy(array('user'=>$this->getUser())),
             'produits' => $produit->findAll(),
             'categories' => $categorie->findAll(),
+            'panier' => $paniers,
+
         ]);
+
+
     }
 }

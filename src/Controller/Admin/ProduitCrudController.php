@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
@@ -45,6 +46,7 @@ class ProduitCrudController extends AbstractCrudController
         yield TextField::new('marque');
         yield TextField::new('nom_vendeur');
         yield NumberField::new('contact_vendeur');
+        yield TextField::new('couverture_img');
         yield CollectionField::new('image')
             ->setEntryType(ImageType::class)
             ->onlyOnForms();

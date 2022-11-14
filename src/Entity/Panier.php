@@ -21,6 +21,12 @@ class Panier
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $quantite = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $prix = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -49,4 +55,31 @@ class Panier
 
         return $this;
     }
+
+    public function getQuantite(): ?int
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(?int $quantite): self
+    {
+        $this->quantite = $quantite;
+
+        return $this;
+    }
+
+    public function getPrix(): ?int
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(?int $prix): self
+    {
+        $this->prix = $prix;
+
+        return $this;
+    }
+
+
+
 }

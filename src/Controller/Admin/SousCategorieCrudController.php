@@ -24,7 +24,7 @@ class SousCategorieCrudController extends AbstractCrudController
         yield AssociationField::new('categorie');
         yield TextField::new('nom');
         yield TextEditorField::new('description');
-
+        yield TextField::new('scat_img');
     }
 
 }

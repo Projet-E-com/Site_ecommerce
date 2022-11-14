@@ -486,7 +486,7 @@
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade pt-2 show active" id="pills-one-example1" role="tabpanel" aria-labelledby="pills-one-example1-tab" data-target-group="groups">
                                 <ul class="row list-unstyled products-group no-gutters">
-                                    {% for element in produit %}
+                                    {% for element in produits %}
                                         {% if element.getPrixReduit() is not null %}
                                             {% set detail = path('app_boutique_detail', { 'id': element.id }) %}
                                             <li class="col-6 col-md-4 col-xl product-item">
@@ -503,13 +503,27 @@
                                                                     <div class="text-gray-100">FCFA {{ element.prix }}</div>.
                                                                 </div>
                                                                 <div class="d-none d-xl-block prodcut-add-cart">
-                                                                    <a href="{{ path('add_panier', {'id': element.id}) }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                                                        <a href="{{path('app_login')}}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                    {% else %}
+                                                                        {% for panier in paniers %}
+                                                                            {% if panier.produit.id == produit.id %}
+                                                                                <a href="{{ path("app_panier") }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-arrow-right-categproes"></i></a>
+                                                                            {% else %}
+                                                                                <a href="{{ path("add_panier", {'id' : produit.id}) }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% endif %}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="product-item__footer">
                                                             <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                                <a href="{{ path('app_souhait', {'id': element.id}) }}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i>Souhait</a>
+                                                                {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                                                    <a href="{{ path('app_login') }}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> J'aime</a>
+                                                                {% else %}
+                                                                    <a href="{{ path('app_souhait', {'id': element.id}) }}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> J'aime</a>
+                                                                {% endif %}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -544,162 +558,110 @@
                         </a>
                     </div>
                     <!-- End Full banner -->
-                    <!-- Product-with-banner -->
-                    <div class="mb-8">
-                        <dv class=" d-flex justify-content-between border-bottom border-color-1 flex-md-nowrap flex-wrap border-sm-bottom-0">
-                            <h3 class="section-title mb-0 pb-2 font-size-22">Laptops & Computers</h3>
-                        </dv>
-                        <div class="row">
-                            <div class="col-auto">
-                                <a href="../shop/shop.html" class="d-block">
-                                    <img class="img-fluid" src="../../assets/img/212X305/img2.jpg" alt="Image Description">
-                                </a>
+                    {% set cpt = 0 %}
+                    {% for categorie in categories %}
+                        {% if cpt < 3 %}
+                            <!-- Product-with-banner -->
+                            <div class="mb-8">
+                                <dv class=" d-flex justify-content-between border-bottom border-color-1 flex-md-nowrap flex-wrap border-sm-bottom-0">
+                                    <h3 class="section-title mb-0 pb-2 font-size-22">{{ categorie.nom }}</h3>
+                                </dv>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a href="{{ path("app_boutique_categorie", {'id' : categorie.id}) }}" class="d-block">
+                                            <img class="img-fluid" src="{{ categorie.categorieImg }}" alt="Image Description" width="212" height="305">
+                                        </a>
+                                    </div>
+                                    <div class="col">
+                                        <ul class="row list-unstyled products-group no-gutters">
+                                            {% for produit in produits %}
+                                                {% set cpt_prod = 0 %}
+                                                {% if categorie.id == produit.sousCategorie.categorie.id and cpt <= 3%}
+                                                    <li class="col-6 col-md-4 col-wd-3 product-item">
+                                                    <div class="product-item__outer h-100">
+                                                        <div class="product-item__inner px-xl-4 p-3">
+                                                            <div class="product-item__body pb-xl-2">
+                                                                <div class="mb-2"><a href="{{ path("app_boutique_souscategorie", {'id' : produit.sousCategorie.id}) }}" class="font-size-12 text-gray-5">{{ produit.sousCategorie.nom }}</a></div>
+                                                                <h5 class="mb-1 product-item__title"><a href="{{ path("app_boutique_detail", {'id' : produit.id}) }}" class="text-blue font-weight-bold"> {{ produit.nom}} </a></h5>
+                                                                <div class="mb-2">
+                                                                    <a href="{{ path("app_boutique_detail", {'id' : produit.id}) }}" class="d-block text-center"><img class="img-fluid" src="{{ produit.couvertureImg }}" alt="Image Description"></a>
+                                                                </div>
+                                                                <div class="flex-center-between mb-1">
+                                                                    <div class="prodcut-price">
+                                                                        <div class="text-gray-100"> {{ produit.prix }} </div>
+                                                                    </div>
+                                                                    <div class="d-none d-xl-block prodcut-add-cart">
+                                                                        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                                                            <a href="{{path('app_login')}}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                        {% else %}
+                                                                            {% set id = [] %}
+                                                                            {% for panier in paniers %}
+                                                                                {% set id = id|merge([panier.produit.id]) %}
+{#                                                                                {% if produit.id == panier.produit.id %}#}
+{#                                                                                    <a href="{{ path("app_panier") }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-arrow-right-categproes"></i></a>#}
+{#                                                                                    {% set break = true %}#}
+{#                                                                                {% else %}#}
+{#                                                                                    <a href="{{ path("add_panier", {'id' : produit.id}) }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>#}
+{#                                                                                {% endif %}#}
+                                                                            {% endfor %}
+                                                                            {% if produit.id in id %}
+                                                                                <a href="{{ path("app_panier") }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-arrow-right-categproes"></i></a>
+                                                                                {% set break = true %}
+                                                                            {% else %}
+                                                                                <a href="{{ path("add_panier", {'id' : produit.id}) }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-item__footer">
+                                                                <div class="border-top pt-2 flex-center-between flex-wrap">
+                                                                    <a href="{{ path("add_souhait", {'id' : produit.id}) }}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> J'aime</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                    {% set cpt_prod = cpt_prod + 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col">
-                                <ul class="row list-unstyled products-group no-gutters">
-                                    <li class="col-6 col-md-4 col-wd-3 product-item">
-                                        <div class="product-item__outer h-100">
-                                            <div class="product-item__inner px-xl-4 p-3">
-                                                <div class="product-item__body pb-xl-2">
-                                                    <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">Speakers</a></div>
-                                                    <h5 class="mb-1 product-item__title"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">Wireless Audio System Multiroom 360 degree Full base audio</a></h5>
-                                                    <div class="mb-2">
-                                                        <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid" src="../../assets/img/212X200/img1.jpg" alt="Image Description"></a>
-                                                    </div>
-                                                    <div class="flex-center-between mb-1">
-                                                        <div class="prodcut-price">
-                                                            <div class="text-gray-100">$685,00</div>
-                                                        </div>
-                                                        <div class="d-none d-xl-block prodcut-add-cart">
-                                                            <a href="../shop/single-product-fullwidth.html" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="product-item__footer">
-                                                    <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                        <a href="../shop/compare.html" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-                                                        <a href="../shop/wishlist.html" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="col-6 col-md-4 col-wd-3 product-item">
-                                        <div class="product-item__outer h-100">
-                                            <div class="product-item__inner px-xl-4 p-3">
-                                                <div class="product-item__body pb-xl-2">
-                                                    <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">Speakers</a></div>
-                                                    <h5 class="mb-1 product-item__title"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">Tablet White EliteBook Revolve 810 G2</a></h5>
-                                                    <div class="mb-2">
-                                                        <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid" src="../../assets/img/212X200/img2.jpg" alt="Image Description"></a>
-                                                    </div>
-                                                    <div class="flex-center-between mb-1">
-                                                        <div class="prodcut-price d-flex align-items-center position-relative">
-                                                            <ins class="font-size-20 text-red text-decoration-none">$1999,00</ins>
-                                                            <del class="font-size-12 tex-gray-6 position-absolute bottom-100">$2 299,00</del>
-                                                        </div>
-                                                        <div class="d-none d-xl-block prodcut-add-cart">
-                                                            <a href="../shop/single-product-fullwidth.html" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="product-item__footer">
-                                                    <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                        <a href="../shop/compare.html" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-                                                        <a href="../shop/wishlist.html" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="col-6 col-md-4 col-wd-3 product-item remove-divider-md-lg remove-divider-xl d-md-none d-xl-block">
-                                        <div class="product-item__outer h-100">
-                                            <div class="product-item__inner px-xl-4 p-3">
-                                                <div class="product-item__body pb-xl-2">
-                                                    <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">Speakers</a></div>
-                                                    <h5 class="mb-1 product-item__title"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">Purple Solo 2 Wireless</a></h5>
-                                                    <div class="mb-2">
-                                                        <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid" src="../../assets/img/212X200/img3.jpg" alt="Image Description"></a>
-                                                    </div>
-                                                    <div class="flex-center-between mb-1">
-                                                        <div class="prodcut-price">
-                                                            <div class="text-gray-100">$685,00</div>
-                                                        </div>
-                                                        <div class="d-none d-xl-block prodcut-add-cart">
-                                                            <a href="../shop/single-product-fullwidth.html" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="product-item__footer">
-                                                    <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                        <a href="../shop/compare.html" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-                                                        <a href="../shop/wishlist.html" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="col-6 col-md-4 col-wd-3 product-item d-xl-none d-wd-block remove-divider">
-                                        <div class="product-item__outer h-100">
-                                            <div class="product-item__inner px-xl-4 p-3">
-                                                <div class="product-item__body pb-xl-2">
-                                                    <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">Speakers</a></div>
-                                                    <h5 class="mb-1 product-item__title"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">Smartphone 6S 32GB LTE</a></h5>
-                                                    <div class="mb-2">
-                                                        <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid" src="../../assets/img/212X200/img4.jpg" alt="Image Description"></a>
-                                                    </div>
-                                                    <div class="flex-center-between mb-1">
-                                                        <div class="prodcut-price">
-                                                            <div class="text-gray-100">$685,00</div>
-                                                        </div>
-                                                        <div class="d-none d-xl-block prodcut-add-cart">
-                                                            <a href="../shop/single-product-fullwidth.html" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="product-item__footer">
-                                                    <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                        <a href="../shop/compare.html" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-                                                        <a href="../shop/wishlist.html" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                            <!-- End Product-with-banner -->
+                            {% set cpt = cpt + 1 %}
+                        {% elseif cpt == 3 %}
+                            <!-- Banner 2 columns -->
+                            <div class="mb-8">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <a href="../shop/shop.html">
+                                            <img class="img-fluid" src="../../assets/img/536X150/img1.jpg" alt="Image Description">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="../shop/shop.html">
+                                            <img class="img-fluid" src="../../assets/img/536X150/img2.jpg" alt="Image Description">
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <!-- End Product-with-banner -->
-                    <!-- Banner 2 columns -->
-                    <div class="mb-8">
-                        <div class="row">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <a href="../shop/shop.html">
-                                    <img class="img-fluid" src="../../assets/img/536X150/img1.jpg" alt="Image Description">
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="../shop/shop.html">
-                                    <img class="img-fluid" src="../../assets/img/536X150/img2.jpg" alt="Image Description">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End Banner 2 columns -->
-                    <!-- Smartphones -->
-                    <div class="position-relative">
-                        <div class="border-bottom border-color-1 mb-2">
-                            <h3 class="section-title mb-0 pb-2 font-size-22">Smartphones</h3>
-                        </div>
-                        <div class="js-slick-carousel u-slick position-static overflow-hidden u-slick-overflow-visble pb-7 pt-2 px-1"
-                             data-pagi-classes="text-center right-0 bottom-1 left-0 u-slick__pagination u-slick__pagination--long mb-0 z-index-n1 mt-3 mt-md-0"
-                             data-slides-show="5"
-                             data-slides-scroll="1"
-                             data-arrows-classes="position-absolute top-0 font-size-17 u-slick__arrow-normal top-10"
-                             data-arrow-left-classes="fa fa-angle-left right-1"
-                             data-arrow-right-classes="fa fa-angle-right right-0"
-                             data-responsive='[{
+                            <!-- End Banner 2 columns -->
+                        {% else %}
+                            <!-- Smartphones -->
+                            <div class="position-relative">
+                                <div class="border-bottom border-color-1 mb-2">
+                                    <h3 class="section-title mb-0 pb-2 font-size-22">{{ categorie.nom }}</h3>
+                                </div>
+                                <div class="js-slick-carousel u-slick position-static overflow-hidden u-slick-overflow-visble pb-7 pt-2 px-1"
+                                     data-pagi-classes="text-center right-0 bottom-1 left-0 u-slick__pagination u-slick__pagination--long mb-0 z-index-n1 mt-3 mt-md-0"
+                                     data-slides-show="5"
+                                     data-slides-scroll="1"
+                                     data-arrows-classes="position-absolute top-0 font-size-17 u-slick__arrow-normal top-10"
+                                     data-arrow-left-classes="fa fa-angle-left right-1"
+                                     data-arrow-right-classes="fa fa-angle-right right-0"
+                                     data-responsive='[{
                                   "breakpoint": 1400,
                                   "settings": {
                                     "slidesToShow": 4
@@ -725,38 +687,54 @@
                                     "slidesToShow": 2
                                   }
                                 }]'>
-                            <div class="js-slide products-group">
-                                <div class="product-item">
-                                    <div class="product-item__outer h-100">
-                                        <div class="product-item__inner px-wd-4 p-2 p-md-3">
-                                            <div class="product-item__body pb-xl-2">
-                                                <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">Speakers</a></div>
-                                                <h5 class="mb-1 product-item__title"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">Wireless Audio System Multiroom 360 degree Full base audio</a></h5>
-                                                <div class="mb-2">
-                                                    <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid" src="../../assets/img/212X200/img1.jpg" alt="Image Description"></a>
-                                                </div>
-                                                <div class="flex-center-between mb-1">
-                                                    <div class="prodcut-price">
-                                                        <div class="text-gray-100">$685,00</div>
-                                                    </div>
-                                                    <div class="d-none d-xl-block prodcut-add-cart">
-                                                        <a href="../shop/single-product-fullwidth.html" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                    {% for produit in produits %}
+                                        {% if categorie.id == produit.sousCategorie.categorie.id  %}
+                                            <div class="js-slide products-group">
+                                                <div class="product-item">
+                                                    <div class="product-item__outer h-100">
+                                                        <div class="product-item__inner px-wd-4 p-2 p-md-3">
+                                                            <div class="product-item__body pb-xl-2">
+                                                                <div class="mb-2"><a href="{{ path("app_boutique_souscategorie", {'id' : produit.sousCategorie.id}) }}" class="font-size-12 text-gray-5">{{ produit.sousCategorie.nom }}</a></div>
+                                                                <h5 class="mb-1 product-item__title"><a href="{{ path("app_boutique_detail", {'id' : produit.id}) }}" class="text-blue font-weight-bold">{{ produit.nom }}</a></h5>
+                                                                <div class="mb-2">
+                                                                    <a href="{{ path("app_boutique_detail", {'id' : produit.id}) }}" class="d-block text-center"><img class="img-fluid" src="{{ produit.couvertureImg }}" alt="Image Description"></a>
+                                                                </div>
+                                                                <div class="flex-center-between mb-1">
+                                                                    <div class="prodcut-price">
+                                                                        <div class="text-gray-100">{{ produit.prix }}</div>
+                                                                    </div>
+                                                                    <div class="d-none d-xl-block prodcut-add-cart">
+                                                                        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                                                            <a href="{{path('app_login')}}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                        {% else %}
+                                                                            {% for panier in paniers %}
+                                                                                {% if panier.produit.id == produit.id %}
+                                                                                    <a href="{{ path("app_panier") }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-arrow-right-categproes"></i></a>
+                                                                                {% else %}
+                                                                                    <a href="{{ path("add_panier", {'id' : produit.id}) }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-item__footer">
+                                                                <div class="border-top pt-2 flex-center-between flex-wrap">
+                                                                    <a href="{{ path("add_souhait", {'id' : produit.id}) }}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> J'aime </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="product-item__footer">
-                                                <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                    <a href="../shop/compare.html" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-                                                    <a href="../shop/wishlist.html" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <!-- End Smartphones -->
+                            <!-- End Smartphones -->
+                        {% endif %}
+                    {% endfor %}
+
                     <!-- Recently viewed -->
                     {# <div class="position-relative">
                         <div class="border-bottom border-color-1 mb-2">

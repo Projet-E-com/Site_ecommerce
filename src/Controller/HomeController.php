@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Panier;
+use App\Entity\Produit;
 use App\Repository\CategorieRepository;
+use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\SousCategorieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,27 +15,32 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index( ProduitRepository $produit, CategorieRepository $categories): Response
+    public function index( ProduitRepository $produit, CategorieRepository $categories, PanierRepository $paniers, ?Panier $panier, ?Produit $produits): Response
     {
         return $this->render('home/index.html.twig', [
-            'produit' => $produit->findAll(),
-            'categories' => $categories->findAll()
+            'produits' => $produit->findAll(),
+            'categories' => $categories->findAll(),
+            'paniers' => $paniers->findAll(),
+            'panier' => $panier,
+            'produit' => $produits
         ]);
     }
 
     #[Route('/contact', name: 'app_contact')]
-    public function contact(CategorieRepository $categorie): Response
+    public function contact(CategorieRepository $categorie, PanierRepository $paniers): Response
     {
         return $this->render('contact.html.twig', [
-            'categories' => $categorie->findAll()
+            'categories' => $categorie->findAll(),
+            'paniers' => $paniers->findAll(),
         ]);
     }
 
     #[Route('/apropos', name: 'app_apropos')]
-    public function apropos(CategorieRepository $categorie): Response
+    public function apropos(CategorieRepository $categorie, PanierRepository $paniers): Response
     {
         return $this->render('apropos.html.twig', [
-            'categories' => $categorie->findAll()
+            'categories' => $categorie->findAll(),
+            'paniers' => $paniers->findAll(),
         ]);
     }
 }

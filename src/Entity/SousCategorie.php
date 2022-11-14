@@ -29,6 +29,9 @@ class SousCategorie
     #[ORM\OneToMany(mappedBy: 'sousCategorie', targetEntity: Produit::class)]
     private Collection $produit;
 
+    #[ORM\Column(length: 255)]
+    private ?string $scat_img = null;
+
     public function __construct()
     {
         $this->produit = new ArrayCollection();
@@ -108,5 +111,17 @@ class SousCategorie
     public function __toString(): string
     {
         return $this->nom;
+    }
+
+    public function getScatImg(): ?string
+    {
+        return $this->scat_img;
+    }
+
+    public function setScatImg(string $scat_img): self
+    {
+        $this->scat_img = $scat_img;
+
+        return $this;
     }
 }

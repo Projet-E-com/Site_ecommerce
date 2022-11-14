@@ -24,10 +24,10 @@ class Produit implements TimestampedInterface
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $prix_reduit = null;
+    private ?int $prix_reduit = null;
 
     #[ORM\Column]
-    private ?float $prix = null;
+    private ?int $prix = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $marque = null;
@@ -65,6 +65,9 @@ class Produit implements TimestampedInterface
 
     #[ORM\OneToMany(mappedBy: 'produit', targetEntity: Souhait::class, orphanRemoval: true)]
     private Collection $souhait;
+
+    #[ORM\Column(length: 255)]
+    private ?string $couverture_img = null;
 
     public function __construct()
     {
@@ -358,6 +361,18 @@ class Produit implements TimestampedInterface
                 $souhait->setProduit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCouvertureImg(): ?string
+    {
+        return $this->couverture_img;
+    }
+
+    public function setCouvertureImg(string $couverture_img): self
+    {
+        $this->couverture_img = $couverture_img;
 
         return $this;
     }

@@ -18,11 +18,13 @@ class PanierController extends AbstractController
     public function ajoutpanier(int $id, ManagerRegistry $doctrine, ProduitRepository $produit, CategorieRepository $categorie, Request $request): Response
     {
         $entityManager = $doctrine->getManager();
-
+        $element = $produit->find($id);
         $panier = new Panier();
         $panier
             ->setProduit($produit->find($id))
             ->setUser($this->getUser())
+            ->setQuantite(1)
+            ->setPrix($element->getPrix())
         ;
 
         $entityManager->persist($panier);
@@ -32,6 +34,44 @@ class PanierController extends AbstractController
         $referer = $request->headers->get('referer');
         return $this->redirect($referer);
     }
+
+    #[Route('/suppression-panier/{id}', name: 'sup_panier')]
+    public function sup_panier(int $id, ManagerRegistry $doctrine, Request $request, Panier $panier): Response
+    {
+        $entityManager = $doctrine->getManager();
+
+        $panier->getId($id);
+
+        $entityManager->remove($panier);
+
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
+    }
+
+    #[Route('/update-panier/{id}', name: 'update_panier')]
+    public function update_panier(int $id, ManagerRegistry $doctrine, Request $request, Panier $panier): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $quantite = $request->get('quantite');
+        $panier->getId($id);
+        dd($quantite);
+        $panier->setQuantite($quantite);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager->persist();
+            $entityManager->flush();
+            return $this->render('home/index.html.twig', [
+
+            ]);
+        }
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
+    }
+
 
     #[Route('/ajout_souhait/{id}', name: 'add_souhait')]
     public function ajoutsouhait(int $id, ManagerRegistry $doctrine, ProduitRepository $produit, CategorieRepository $categorie, Request $request): Response
@@ -54,8 +94,5 @@ class PanierController extends AbstractController
         ]);
     }
 
-    #[Route('/remove')]
-    public function removepanier(){
 
-    }
 }

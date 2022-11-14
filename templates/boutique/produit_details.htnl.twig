@@ -80,7 +80,11 @@
                                 </div>
                             </div>
                             <div class="flex-horizontal-center flex-wrap mb-4">
-                                <a href="{{ path('app_souhait') }}" class="text-gray-6 font-size-13 mr-2"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
+                                {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                    <a href="{{ path('app_login') }}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> J'aime</a>
+                                {% else %}
+                                    <a href="{{ path('app_souhait', {'id': produits.id}) }}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> J'aime</a>
+                                {% endif %}
                             </div>
                             <div class="mb-2">
                                 <ul class="font-size-14 pl-3 ml-1 text-gray-110">
@@ -120,7 +124,17 @@
                                     <!-- End Quantity -->
                                 </div>
                                 <div class="ml-md-3">
-                                    <a href="{{ path('add_panier', {'id': produit.id}) }}" class="btn px-5 btn-primary-dark transition-3d-hover"><i class="ec ec-add-to-cart mr-2 font-size-20"></i> Add to Cart</a>
+                                    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                        <a href="{{path('app_login')}}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                    {% else %}
+                                        {% for panier in paniers %}
+                                            {% if panier.produit.id == produit.id %}
+                                                <a href="{{ path("app_panier") }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-arrow-right-categproes"></i></a>
+                                            {% else %}
+                                                <a href="{{ path("add_panier", {'id' : produit.id}) }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Adresse;
 use App\Entity\Categorie;
 use App\Entity\Produit;
 use App\Entity\SousCategorie;
@@ -46,5 +47,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Tous les produits', 'fas fa-newspaper', Produit::class),
             MenuItem::linkToCrud('Ajout produit', 'fas fa-plus', Produit::class)->setAction(Crud::PAGE_NEW)
         ]);
+
+        yield MenuItem::linkToCrud('Adresse', '', Adresse::class);
     }
 }
