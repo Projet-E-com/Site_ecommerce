@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Panier;
 use App\Entity\Souhait;
+use App\Form\PanierType;
 use App\Repository\CategorieRepository;
 use App\Repository\ProduitRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -54,10 +55,8 @@ class PanierController extends AbstractController
     public function update_panier(int $id, ManagerRegistry $doctrine, Request $request, Panier $panier): Response
     {
         $entityManager = $doctrine->getManager();
-        $quantite = $request->get('quantite');
-        $panier->getId($id);
-        dd($quantite);
-        $panier->setQuantite($quantite);
+        $form = $this->createForm(PanierType::class, $panier);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 

@@ -104,36 +104,39 @@
                             </div>
                             <div class="d-md-flex align-items-end mb-3">
                                 <div class="max-width-150 mb-4 mb-md-0">
-                                    <h6 class="font-size-14">Quantity</h6>
-                                    <!-- Quantity -->
-                                    <div class="border rounded-pill py-2 px-3 border-color-1">
-                                        <div class="js-quantity row align-items-center">
-                                            <div class="col">
-                                                <input class="js-result form-control h-auto border-0 rounded p-0 shadow-none" type="text" value="1">
-                                            </div>
-                                            <div class="col-auto pr-1">
-                                                <a class="js-minus btn btn-icon btn-xs btn-outline-secondary rounded-circle border-0" href="javascript:;">
-                                                    <small class="fas fa-minus btn-icon__inner"></small>
-                                                </a>
-                                                <a class="js-plus btn btn-icon btn-xs btn-outline-secondary rounded-circle border-0" href="javascript:;">
-                                                    <small class="fas fa-plus btn-icon__inner"></small>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Quantity -->
+{#                                    <h6 class="font-size-14">Quantity</h6>#}
+{#                                    <!-- Quantity -->#}
+{#                                    <div class="border rounded-pill py-2 px-3 border-color-1">#}
+{#                                        <div class="js-quantity row align-items-center">#}
+{#                                            <div class="col">#}
+{#                                                <input class="js-result form-control h-auto border-0 rounded p-0 shadow-none" type="text" value="1">#}
+{#                                            </div>#}
+{#                                            <div class="col-auto pr-1">#}
+{#                                                <a class="js-minus btn btn-icon btn-xs btn-outline-secondary rounded-circle border-0" href="javascript:;">#}
+{#                                                    <small class="fas fa-minus btn-icon__inner"></small>#}
+{#                                                </a>#}
+{#                                                <a class="js-plus btn btn-icon btn-xs btn-outline-secondary rounded-circle border-0" href="javascript:;">#}
+{#                                                    <small class="fas fa-plus btn-icon__inner"></small>#}
+{#                                                </a>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <!-- End Quantity -->#}
                                 </div>
                                 <div class="ml-md-3">
                                     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                                         <a href="{{path('app_login')}}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
                                     {% else %}
+                                        {% set id = [] %}
                                         {% for panier in paniers %}
-                                            {% if panier.produit.id == produit.id %}
-                                                <a href="{{ path("app_panier") }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-arrow-right-categproes"></i></a>
-                                            {% else %}
-                                                <a href="{{ path("add_panier", {'id' : produit.id}) }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
-                                            {% endif %}
+                                            {% set id = id|merge([panier.produit.id]) %}
                                         {% endfor %}
+                                        {% if produits.id in id %}
+                                            <a href="{{ path("app_panier") }}" class="btn btn-primary transition-3d-hover">Voir le panier<i class="ec ec-arrow-right-categproes"></i></a>
+                                            {% set break = true %}
+                                        {% else %}
+                                            <a href="{{ path("add_panier", {'id' : produits.id}) }}" class="btn btn-primary transition-3d-hover">Ajouter au panier<i class="ec ec-add-to-cart"></i></a>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                             </div>

@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CommandeController!{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5 p-5">
+        <div class="p-5">
+            {% include 'compte/compte_nav/nav.html.twig' %}
+        </div>
+        {% set pan_nbr = 0 %}
+        {% for panier in paniers %}
+            {% set pan_nbr = pan_nbr + 1 %}
+        {% endfor %}
+        {% set cmd_nbr = 0 %}
+        {% set cmdl_nbr =0 %}
+        {% set cmda_nbr = 0 %}
+        {% for commande in commandes %}
+            {% set cmd_nbr = cmd_nbr + 1 %}
+        {% endfor %}
+
+        <div class="container px-10 ">
+            <div class="row">
+                <div class="col-md-8 d-grid gap-5">
+                    <div class="card">
+                        <h5 class="card-header">Information personnel</h5>
+                        <div class="card-body">
+                            <h5 class="card-title"> <u>Email</u> </h5>
+                            <p class="card-text">{{ user.userIdentifier }}</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h5 class="card-header">Adresses</h5>
+                        <div class="card-body">
+                            <h5 class="card-title"> <u>Informations</u> </h5>
+                            <p class="card-text"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 d-grid gap-3">
+                    <div class="card">
+                        <h5 class="card-header">Commande</h5>
+                        <div class="card-body">
+                            <p class="card-text">({{ cmd_nbr }}) commande(s) passée</p>
+                            <p class="card-text">(nbr) commande(s) livrée</p>
+                            <p class="card-text">(nbr) commande(s) en attente</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h5 class="card-header">Panier</h5>
+                        <div class="card-body">
+                            <p class="card-text">({{ pan_nbr }}) produit(s) dans le panier</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h5 class="card-header">Liste de souhait</h5>
+                        <div class="card-body">
+                            <p class="card-text">(nbr) produit(s) souhaité</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

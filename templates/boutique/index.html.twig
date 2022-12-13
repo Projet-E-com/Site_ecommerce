@@ -288,11 +288,16 @@
                                                         {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                                                             <a href="{{path('app_login')}}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
                                                         {% else %}
-                                                                {% if paniers.produit == produit.id %}
-                                                                    <a href="{{ path("app_panier") }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-arrow-right-categproes"></i></a>
-                                                                {% else %}
-                                                                    <a href="{{ path("add_panier", {'id' : produit.id}) }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
-                                                                {% endif %}
+                                                            {% set id = [] %}
+                                                            {% for panier in paniers %}
+                                                                {% set id = id|merge([panier.produit.id]) %}
+                                                            {% endfor %}
+                                                            {% if produit.id in id %}
+                                                                <a href="{{ path("app_panier") }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-arrow-right-categproes"></i></a>
+                                                                {% set break = true %}
+                                                            {% else %}
+                                                                <a href="{{ path("add_panier", {'id' : produit.id}) }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                            {% endif %}
                                                         {% endif %}
 
                                                     </div>
@@ -356,13 +361,20 @@
                                                         <div class="text-gray-100">{{ produit.prix }}</div>
                                                     </div>
                                                     <div class="prodcut-add-cart">
-                                                        {% for panier in paniers %}
-                                                            {% if panier.produit.id != produit.id %}
+                                                        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                                            <a href="{{path('app_login')}}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                        {% else %}
+                                                            {% set id = [] %}
+                                                            {% for panier in paniers %}
+                                                                {% set id = id|merge([panier.produit.id]) %}
+                                                            {%  endfor %}
+                                                            {% if produit.id in id %}
                                                                 <a href="{{ path("app_panier") }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-arrow-right-categproes"></i></a>
+                                                                {% set break = true %}
                                                             {% else %}
-                                                                <a href="{{path('add_panier', {'id': produit.id} )}}" class="btn btn-sm btn-block btn-primary-dark btn-wide transition-3d-hover">Add to cart</a>
+                                                                <a href="{{ path("add_panier", {'id' : produit.id}) }}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
                                                             {% endif %}
-                                                        {% endfor %}
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                                 <div class="flex-horizontal-center justify-content-between justify-content-wd-center flex-wrap">

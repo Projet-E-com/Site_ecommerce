@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CommandeController!{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5 p-5">
+        <div class="p-5">
+            {% include 'compte/compte_nav/nav.html.twig' %}
+        </div>
+    </div>
+
+    <div class="container px-10 mb-5">
+        {% for commande in commandes %}
+            <div class="card mx-20 mb-5">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col text-start">Commande N° {{ commande.numero }}</div>
+                        <div class="col text-end">Etat</div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row m-2">
+                        <div class="col text-start">({{ commande|length }}) Articles commande</div>
+                        <div class="col text-end">Date de commande : {{ commande.createdAt|date("d/m/Y") }}</div>
+                    </div>
+                    <a href="#" class="btn btn-primary text-end">Details</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

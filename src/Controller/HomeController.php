@@ -20,7 +20,7 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', [
             'produits' => $produit->findAll(),
             'categories' => $categories->findAll(),
-            'paniers' => $paniers->findAll(),
+            'paniers' => $paniers->findBy(array('user'=>$this->getUser())),
             'panier' => $panier,
             'produit' => $produits
         ]);
@@ -31,7 +31,7 @@ class HomeController extends AbstractController
     {
         return $this->render('contact.html.twig', [
             'categories' => $categorie->findAll(),
-            'paniers' => $paniers->findAll(),
+            'paniers' => $paniers->findBy(array('user'=>$this->getUser())),
         ]);
     }
 
@@ -40,7 +40,7 @@ class HomeController extends AbstractController
     {
         return $this->render('apropos.html.twig', [
             'categories' => $categorie->findAll(),
-            'paniers' => $paniers->findAll(),
+            'paniers' => $paniers->findBy(array('user'=>$this->getUser())),
         ]);
     }
 }
