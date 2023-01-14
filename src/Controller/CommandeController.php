@@ -16,6 +16,7 @@ use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,7 +89,7 @@ class CommandeController extends AbstractController
 
         $pan = $paniers->findAll();
          foreach ($pan as $qte){
-             $procmd = new CommandeProduit();
+            $procmd = new CommandeProduit();
             $procmd->setCommandeId($commandes->find($id))
                 ->setQuantite($qte->getQuantite())
                 ->setProduit($qte->getProduit());
@@ -101,14 +102,18 @@ class CommandeController extends AbstractController
          $entityManager->flush();
 
          $transport = Transport::fromDsn('smtp://samanhugues@gmail.com:paecqataytwhtdys@smtp.gmail.com:587');
-         $mailer =  new Mailer($transport);
-         $email = (new Email());
+         $mailer = new Mailer($transport);
+         $email = (new TemplatedEmail());
          $email->from('samanhugues@gmail.com');
          $email->to($this->getUser()->getUserIdentifier());
-         $email->subject('Confirmation de commande');
+         $email->subject('Confirmation de commande ');
          $email->text('Sending emails is fun again!')
-                ->html('<p>See Twig integration for better HTML integration!</p>');
-
+                ->htmltemplate('emails/email.html.twig')
+                ->textTemplate('emails/email.txt.twig')
+                ->context([
+                    'expiration_date' => new \DateTime('+7 days'),
+                    'username' => 'foo',
+                ]);
          $mailer->send($email);
 
 

@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Notifier\Message\SmsMessage;
+use Symfony\Component\Notifier\TexterInterface;
 
 class SecurityController extends AbstractController
 {
@@ -14,9 +16,22 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils, CategorieRepository $categorie): Response
     {
 
-       if ($this->getUser()) {
-           return $this->redirectToRoute('app_home');
-       }
+//       if ($this->getUser()) {
+//
+////           $sms = new SmsMessage(
+////           // the phone number to send the SMS message to
+////               '+2250788146470',
+////               // the message
+////               'Nouvelle connexion a ton compte. whouuuuuu sa marche !!!!!!!',
+////               // optionally, you can override default "from" defined in transports
+////               '+2250779501388',
+////           );
+////
+////           $sentMessage = $texter->send($sms);
+//
+//           return $this->redirectToRoute('app_home');
+//
+//       }
 
        // get the login error if there is one
        $error = $authenticationUtils->getLastAuthenticationError();

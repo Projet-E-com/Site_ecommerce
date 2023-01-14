@@ -49,6 +49,7 @@ class ProduitCrudController extends AbstractCrudController
         yield TextField::new('couverture_img');
         yield CollectionField::new('image')
             ->setEntryType(ImageType::class)
+            
             ->onlyOnForms();
         yield BooleanField::new('disponibilite');
         yield DateTimeField::new('createdAt')->hideOnForm();
