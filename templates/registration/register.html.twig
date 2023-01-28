@@ -3,14 +3,39 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <div class="bg-gray-13 bg-md-transparent">
+        <div class="container">
+            <!-- breadcrumb -->
+            <div class="my-md-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-3 flex-nowrap flex-xl-wrap overflow-auto overflow-xl-visble">
+                        <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1"><a href="{{ path('app_home') }}">Acceuil</a></li>
+                        <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1 active" aria-current="page">Inscription</li>
+                    </ol>
+                </nav>
+            </div>
+            <!-- End breadcrumb -->
+        </div>
+    </div>
+    <!-- End breadcrumb -->
+    <div class="container">
+        <div class="mb-4">
+            <h1 class="text-center">Inscription</h1>
+        </div>
+        <div class="my-4 my-xl-8">
+            {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword, {
+                label: 'Password'
+            }) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
+            <button type="submit" class="btn btn-primary">Register</button>
+            <p class="ml-2 mt-3">
+                Si vous avez un compte
+                <a href="{{ path('app_login') }}">Connecter vous ici</a>
+            </p>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
 {% endblock %}
