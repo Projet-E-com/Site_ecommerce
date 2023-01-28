@@ -37,7 +37,7 @@
                             {% for image in produits.image %}
 
                                 <div class="js-slide">
-                                    <img class="img-fluid" src="{{ image.url }}" alt="{{ image.nom }}">
+                                    <img class="img-fluid" src="{{ asset('assets/img/'~image.url) }}" alt="{{ image.nom }}">
                                 </div>
 
                             {% endfor %}
@@ -51,7 +51,7 @@
                             {% for image in produits.image %}
 
                                 <div class="js-slide" style="cursor: pointer;">
-                                    <img class="img-fluid" src="{{ image.url }}" alt="{{ image.nom }}">
+                                    <img class="img-fluid" src="{{ asset('assets/img/'~image.url) }}" alt="{{ image.nom }}">
                                 </div>
 
                             {% endfor %}
@@ -75,7 +75,7 @@
                                     </a>
                                 </div>
                                 <div class="d-md-flex align-items-center">
-                                    <a href="#" class="max-width-150 ml-n2 mb-2 mb-md-0 d-block"><img class="img-fluid" src="../../assets/img/200X60/img1.png" alt="Image Description"></a>
+                                    <a href="#" class="max-width-150 ml-n2 mb-2 mb-md-0 d-block"><img class="img-fluid" src="{{ asset('assets/img/'~produits.sousCategorie.scatImg) }}" alt="Image Description"></a>
                                     <div class="ml-md-3 text-gray-9 font-size-14">Availability: <span class="text-green font-weight-bold">26 in stock</span></div>
                                 </div>
                             </div>

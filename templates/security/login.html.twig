@@ -3,56 +3,56 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-    <!-- ========== MAIN CONTENT ========== -->
-    <main id="content" role="main">
-        <!-- breadcrumb -->
-        <div class="bg-gray-13 bg-md-transparent">
-            <div class="container">
-                <!-- breadcrumb -->
-                <div class="my-md-3">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-3 flex-nowrap flex-xl-wrap overflow-auto overflow-xl-visble">
-                            <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1"><a href="../home/index.html">Home</a></li>
-                            <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1 active" aria-current="page">Connexion</li>
-                        </ol>
-                    </nav>
-                </div>
-                <!-- End breadcrumb -->
-            </div>
-        </div>
-        <!-- End breadcrumb -->
+<!-- ========== MAIN CONTENT ========== -->
+<main id="content" role="main">
+    <!-- breadcrumb -->
+    <div class="bg-gray-13 bg-md-transparent">
         <div class="container">
-            <div class="mb-4">
-                <h1 class="text-center">Mon compte</h1>
+            <!-- breadcrumb -->
+            <div class="my-md-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-3 flex-nowrap flex-xl-wrap overflow-auto overflow-xl-visble">
+                        <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1"><a href="../home/index.html">Home</a></li>
+                        <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1 active" aria-current="page">Connexion</li>
+                    </ol>
+                </nav>
             </div>
-            <div class="my-4 my-xl-8">
-                <!-- Title -->
-                <div class="border-bottom border-color-1 mb-6">
-                    <h3 class="d-inline-block section-title mb-0 pb-2 font-size-26">Connexion</h3>
-                </div>
-                <p class="text-gray-90 mb-4">Bon retour parmis nous. Veuillez vous connecter</p>
+            <!-- End breadcrumb -->
+        </div>
+    </div>
+    <!-- End breadcrumb -->
+    <div class="container">
+        <div class="mb-4">
+            <h1 class="text-center">Mon compte</h1>
+        </div>
+        <div class="my-4 my-xl-8">
+            <!-- Title -->
+            <div class="border-bottom border-color-1 mb-6">
+                <h3 class="d-inline-block section-title mb-0 pb-2 font-size-26">Connexion</h3>
+            </div>
+            <p class="text-gray-90 mb-4">Bon retour parmis nous. Veuillez vous connecter</p>
 
-                <form method="post">
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                    {% endif %}
+            <form method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
 
-                    {% if app.user %}
-                        <div class="mb-3">
-                            Vous êtes deja connecter a {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Deconnexion</a>
-                        </div>
-                    {% endif %}
+                {% if app.user %}
+                    <div class="mb-3">
+                        Vous êtes deja connecter a {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Deconnexion</a>
+                    </div>
+                {% endif %}
 
-                    <h1 class="h3 mb-3 font-weight-normal">S'il vous plait connecter</h1>
-                    <label for="inputEmail">Email</label>
-                    <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-                    <label for="inputPassword">Password</label>
+                <h1 class="h3 mb-3 font-weight-normal">S'il vous plait connecter</h1>
+                <label for="inputEmail">Email</label>
+                <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                <label for="inputPassword">Password</label>
 
-                    <input type="password" name="_password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-                    {#                <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié</a>#}
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <input type="password" name="_password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+{#                <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié</a>#}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                    {#
+                {#
                     Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
                     See https://symfony.com/doc/current/security/remember_me.html
 
@@ -61,20 +61,20 @@
                             <input type="checkbox" name="_remember_me"> Remember me
                         </label>
                     </div>
-                    #}
+                #}
 
-                    <button class="btn  btn-primary mt-3" type="submit">
-                        se connecter
-                    </button>
-                    <p class="mt-5">
-                        Si Vous n'avez pas de compte
-                        <a class="mt-5 ml-2" href="{{ path('app_register') }}">Inscrivez-vous ici</a>
-                    </p>
-                </form>
+                <button class="btn  btn-primary mt-3" type="submit">
+                    se connecter
+                </button>
+                <p class="mt-5">
+                    Si Vous n'avez pas de compte
+                    <a class="mt-5 ml-2" href="{{ path('app_register') }}">Inscrivez-vous ici</a>
+                </p>
+            </form>
 
 
 
-            </div>
         </div>
-    </main>
+    </div>
+</main>
 {% endblock %}

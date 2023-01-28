@@ -46,10 +46,14 @@ class ProduitCrudController extends AbstractCrudController
         yield TextField::new('marque');
         yield TextField::new('nom_vendeur');
         yield NumberField::new('contact_vendeur');
-        yield TextField::new('couverture_img');
+        yield ImageField::new('couverture_img')
+            ->setBasePath('assets/img')
+            ->setUploadDir('public/assets/img')
+            ->setRequired(false)
+        ;
         yield CollectionField::new('image')
-            ->setEntryType(ImageType::class)
-            
+//            ->setEntryType(ImageType::class, )
+            ->useEntryCrudForm(ImageCrudController::class)
             ->onlyOnForms();
         yield BooleanField::new('disponibilite');
         yield DateTimeField::new('createdAt')->hideOnForm();
