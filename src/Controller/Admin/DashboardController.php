@@ -48,6 +48,8 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Ajout produit', 'fas fa-plus', Produit::class)->setAction(Crud::PAGE_NEW)
         ]);
 
+        yield MenuItem::linkToCrud('Client', '', User::class);
+        yield MenuItem::linkToCrud('Commande', '', Commande::class);
         yield MenuItem::linkToCrud('Adresse', '', Adresse::class);
     }
 }
